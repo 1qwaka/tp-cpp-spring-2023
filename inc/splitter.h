@@ -4,5 +4,5 @@
 #include <vector>
 
 namespace splitter {
-    void split(std::string& src, std::vector<std::string>& dst, char delim);
+    void split(std::string& src, std::vector<std::string>& dst, char delim, bool take_empty=true);
 }
