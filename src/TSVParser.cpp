@@ -8,6 +8,12 @@ TSVParser::TSVParser(const std::string& path) {
         throw std::runtime_error("cannot open file: " + path);
     
     readHeaders();
+
+    columns_ = headers_.size();
+    if (columns_ == 0) {
+        file_.close();
+        throw std::runtime_error("invalid tsv file: " + path);
+    }
 }
 
 void TSVParser::processByPred(TSVRecordPredicate pred, TSVRecordProcessor proc) {
@@ -17,7 +23,7 @@ void TSVParser::processByPred(TSVRecordPredicate pred, TSVRecordProcessor proc) 
         fields.clear();
         splitter::split(line, fields, kFieldsDelim);
         
-        if (pred(fields))
+        if (fields.size() == columns_ && pred(fields))
             proc(fields);
     }
 }
@@ -28,7 +34,8 @@ void TSVParser::processLines(TSVRecordProcessor proc) {
     for (std::string line; std::getline(file_, line); ) {
         fields.clear();
         splitter::split(line, fields, kFieldsDelim);
-        proc(fields);
+        if (fields.size() == columns_)
+            proc(fields);
     }
 }
 

@@ -14,6 +14,7 @@ class TSVParser {
     static constexpr char kFieldsDelim = '\t';
 
     std::vector<std::string> headers_;
+    size_t columns_;
     std::ifstream file_;
 
 public:

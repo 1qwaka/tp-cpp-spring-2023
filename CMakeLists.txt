@@ -15,4 +15,4 @@ add_library(splitter ./src/splitter.cpp)
 
 include_directories(inc)
 
-target_link_libraries(main.exe tsvparser principalsparser titlebasicsparser akasparser splitter)
+target_link_libraries(main.exe principalsparser titlebasicsparser akasparser tsvparser splitter)
