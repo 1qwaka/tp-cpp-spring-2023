@@ -18,5 +18,5 @@ void TitleBasicsParser::filterNonAdultIds(const std::vector<size_t>& src_ids, st
 }
 
 bool TitleBasicsParser::isNonAdult(const std::string& adultField) {
-    return adultField[0] == '0';
+    return adultField[kNonAdultStrFirstCharIdx] == kNonAdultStrFirstChar;
 }
