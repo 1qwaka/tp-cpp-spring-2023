@@ -1,43 +1,61 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <algorithm>
 
-
+#include "args.h"
 #include "PrincipalsParser.h"
 #include "TitleBasicsParser.h"
 #include "AkasParser.h"
 
 
+static constexpr int kNoErr = 0;
+static constexpr int kUsageErr = 1;
+static constexpr int kFilesNotExistsErr = 2;
+
+static constexpr const char *kPrincipalsArg = "--principals";
+static constexpr const char *kTitleBasicsArg = "--titlebasics";
+static constexpr const char *kAkasArg = "--akas";
+static constexpr const char *kNameArg = "--name";
+
+
 bool need_help(int argc, char *argv[]);
 void help();
-bool files_exists(char *argv[]);
-int do_logic(char *argv[]);
+
+bool file_exists(char *path);
+bool files_exists(const std::vector<char*>& files);
+
+int get_ru_title_names_by_character_name(int argc, char *argv[]);
+
 
 int main(int argc, char *argv[]) {
     if (need_help(argc, argv)) {
         help();
-        return 0;
+        return kNoErr;
     }
 
     if (argc != 5) {
-        std::cout << "usage error" << std::endl;
-        return 1;
+        std::cerr << "usage error" << std::endl;
+        return kUsageErr;
     }
 
-    if (!files_exists(argv)) {
-        std::cout << "required files doesn't exists" << std::endl;
-        return 2;
+    std::vector<char*> files{args::get_argvalue_or_null(argc, argv, kPrincipalsArg),
+                             args::get_argvalue_or_null(argc, argv, kTitleBasicsArg),
+                             args::get_argvalue_or_null(argc, argv, kAkasArg)};
+    if (!files_exists(files)) {
+        std::cerr << "required files doesn't exists" << std::endl;
+        return kFilesNotExistsErr;
     }
 
-    return do_logic(argv);
+    return get_ru_title_names_by_character_name(argc, argv);
 }
 
 
-int do_logic(char *argv[]) {
-    PrincipalsParser principals(argv[1]);
-    TitleBasicsParser title_basics(argv[2]);
-    AkasParser akas(argv[3]);
-    std::string name(argv[4]);
+int get_ru_title_names_by_character_name(int argc, char *argv[]) {
+    PrincipalsParser principals(args::get_argvalue_or_null(argc, argv, kPrincipalsArg));
+    TitleBasicsParser title_basics(args::get_argvalue_or_null(argc, argv, kTitleBasicsArg));
+    AkasParser akas(args::get_argvalue_or_null(argc, argv, kAkasArg));
+    std::string name(args::get_argvalue_or_null(argc, argv, kNameArg));
 
     std::vector<size_t> ids, filtered_ids;
 
@@ -69,25 +87,32 @@ int do_logic(char *argv[]) {
     
     akas.printRuNames(filtered_ids);
 
-    return 0;
+    return kNoErr;
 }
 
 
 bool need_help(int argc, char *argv[]) {
-    return argc == 2 && 
-            (std::string("-h") == argv[1] || std::string("--help") == argv[1]);
+    return args::get_arg_or_null(argc, argv, "-h") != nullptr || 
+           args::get_arg_or_null(argc, argv, "--help") != nullptr;
 }
 
 void help() {
-    std::cout << "usage: ./main.exe PRINCIPALS TITLE_BASICS AKAS NAME" << std::endl;
-    std::cout << "PRINCIPALS - path to title.principals.tsv" << std::endl;
-    std::cout << "TITLE_BASICS - path to title.basics.tsv" << std::endl;
-    std::cout << "AKAS - path to title.akas.tsv" << std::endl;
-    std::cout << "NAME - character name" << std::endl;
+    std::cout << "usage: ./main.exe OPTIONS" << std::endl;
+    std::cout << "OPTIONS: " << std::endl;
+    std::cout << "--principals - path to title.principals.tsv" << std::endl;
+    std::cout << "--titlebasics - path to title.basics.tsv" << std::endl;
+    std::cout << "--akas - path to title.akas.tsv" << std::endl;
+    std::cout << "--name - character name" << std::endl;
 }
 
-bool files_exists(char *argv[]) {
-    return std::filesystem::exists(argv[1]) && 
-           std::filesystem::exists(argv[2]) && 
-           std::filesystem::exists(argv[3]); 
+bool file_exists(char *path) {
+    return path && std::filesystem::exists(path);
+}
+
+bool files_exists(const std::vector<char*>& files) {
+    bool exists = true;
+    for (char *f : files) {
+        exists = exists && file_exists(f);
+    }
+    return exists;
 }
