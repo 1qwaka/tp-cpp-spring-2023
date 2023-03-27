@@ -23,4 +23,3 @@ private:
     bool isActorCategory(const std::string& category);
 
 };
-

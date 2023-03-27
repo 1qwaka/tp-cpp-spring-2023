@@ -22,4 +22,3 @@ bool PrincipalsParser::isActorCategory(const std::string& category) {
     return category.find(kActorCategory) != std::string::npos || 
             category.find(kActressCategory) != std::string::npos;
 }
-
