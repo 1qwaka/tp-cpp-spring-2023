@@ -12,7 +12,8 @@ add_library(principalsparser ./src/PrincipalsParser.cpp)
 add_library(titlebasicsparser ./src/TitleBasicsParser.cpp)
 add_library(akasparser ./src/AkasParser.cpp)
 add_library(splitter ./src/splitter.cpp)
+add_library(args ./src/args.cpp)
 
 include_directories(inc)
 
-target_link_libraries(main.exe principalsparser titlebasicsparser akasparser tsvparser splitter)
+target_link_libraries(main.exe principalsparser titlebasicsparser akasparser tsvparser splitter args)
