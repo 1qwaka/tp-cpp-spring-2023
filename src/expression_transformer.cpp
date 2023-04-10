@@ -25,6 +25,8 @@ vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
             break;
         }
         
+        case TokenType::kFloorFunc:
+        case TokenType::kRoundFunc:
         case TokenType::kSumOp:
         case TokenType::kSubOp:
         case TokenType::kDivOp: {
