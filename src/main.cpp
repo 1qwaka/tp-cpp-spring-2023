@@ -41,11 +41,15 @@ int main(int argc, char **argv) {
         return kWrongTokens;
     }
 
-    // std::cout << "size = " << tokens.size() << std::endl;
-    // for (auto &tok : tokens) {
-    //     std::cout << tok << " ";
-    // }
-    // std::cout << std::endl;
+
+#ifdef DEBUG
+    std::cout << "TOKENS SIZE = " << tokens.size() << std::endl;
+    for (auto &tok : tokens) {
+        std::cout << tok << " ";
+    }
+    std::cout << std::endl;
+#endif
+
 
     vector<Token> postfix = expression_transformer::infix_to_postfix(tokens);
 
@@ -54,10 +58,15 @@ int main(int argc, char **argv) {
         return kWrongExpr;
     }
 
-    // for (auto &tok : postfix) {
-    //     std::cout << tok << " ";
-    // }
-    // std::cout << std::endl;
+
+#ifdef DEBUG
+    std::cout << "POSTFIX SIZE = " << postfix.size() << std::endl;
+    for (auto &tok : postfix) {
+        std::cout << tok << " ";
+    }
+    std::cout << std::endl;
+#endif
+
 
     ExpressionTree expr_tree(postfix);
     double res = expr_tree.getRoot()->calculate();
