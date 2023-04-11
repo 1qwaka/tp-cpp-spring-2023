@@ -7,6 +7,8 @@ set (CMAKE_CXX_STANDARD 17)
 
 add_executable(calculator ${SOURCE_EXE})
 
+add_compile_options(-g3)
+
 add_library(token ./src/token.cpp)
 add_library(tokenizer ./src/tokenizer.cpp)
 add_library(expression_transformer ./src/expression_transformer.cpp)

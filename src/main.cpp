@@ -69,6 +69,12 @@ int main(int argc, char **argv) {
 
 
     ExpressionTree expr_tree(postfix);
+
+    if (!expr_tree.valid()) {
+        cerr << "invalid expression" << endl;
+        return kWrongExpr;
+    }
+
     double res = expr_tree.getRoot()->calculate();
 
     cout << res << endl;

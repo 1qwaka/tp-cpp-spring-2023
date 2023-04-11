@@ -8,8 +8,14 @@
 
 using std::string;
 using std::vector;
+using std::array;
 using std::cout, std::cin, std::endl;
 
+static vector<Token> postprocess(vector<Token> &tokens);
+
+static constexpr bool allow_after_num(char c) {
+    return c == ' ' || c == '+' || c == '-' || c == '/' || c == '\0' || c == ')';
+}
 
 vector<Token> arithmetic_tokenizer::tokenize(const string &expr) {
     vector<Token> tokens;
@@ -25,6 +31,7 @@ vector<Token> arithmetic_tokenizer::tokenize(const string &expr) {
 
         case '+': {
             tokens.emplace_back(TokenType::kSumOp);
+        
             break;
         }
         
@@ -74,11 +81,18 @@ vector<Token> arithmetic_tokenizer::tokenize(const string &expr) {
         default: {
             if (c >= '0' && c <= '9') {
                 size_t num_begin = pos;
-                
-                while (pos < expr.size() && expr[pos] >= '0' && expr[pos] <= '9')
-                    pos++;
-                tokens.emplace_back(TokenType::kNumber, expr.substr(num_begin, pos - num_begin));
-                pos--;
+
+                char *end;
+                double num_value = std::strtod(expr.c_str() + num_begin, &end);
+
+                if (allow_after_num(*end)) {
+                    pos = end - expr.c_str();
+                    tokens.emplace_back(TokenType::kNumber, expr.substr(num_begin, pos - num_begin));
+                    pos--;
+                } else {
+                    error = true;
+                }
+
             } else {
                 error = true;
             }
@@ -89,10 +103,19 @@ vector<Token> arithmetic_tokenizer::tokenize(const string &expr) {
 
     }
 
-
     if (error) {
         tokens.clear();
     }
     
     return tokens;
+}
+
+static vector<Token> postprocess(vector<Token> &tokens) {
+    vector<Token>processed;
+
+    for (size_t i = 1; i < tokens.size() - 1; i++) {
+        // if ()
+    }
+    
+    return processed;
 }

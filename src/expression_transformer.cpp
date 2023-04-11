@@ -16,8 +16,12 @@ using std::queue;
 vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
     queue<Token> result;
     stack<Token> operations;
+    bool error = false;
 
     for (Token &tok : tokens) {
+        if (error)
+            break;
+            
         switch (tok.type_)
         {
         case TokenType::kNumber: {
@@ -37,7 +41,9 @@ vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
                 break;
             }
 
-            while (!operations.empty() && operations.top().type_ >= tok.type_) {
+            while (!operations.empty() && 
+                    operations.top().type_ >= tok.type_ && 
+                    operations.top().type_ != TokenType::kOpenBracket) {
                 result.push(operations.top());
                 operations.pop();
             }
@@ -53,12 +59,15 @@ vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
         }
 
         case TokenType::kCloseBracket: {
-            while (operations.top().type_ != TokenType::kOpenBracket) {
+            while (!operations.empty() && operations.top().type_ != TokenType::kOpenBracket) {
                 result.push(operations.top());
                 operations.pop();
             }
-            
-            operations.pop();
+
+            if (operations.empty())
+                error = true;
+            else
+                operations.pop();
 
             break;
         }
@@ -74,7 +83,7 @@ vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
     }
 
     vector<Token> ret;
-    while (!result.empty()) {
+    while (!error && !result.empty()) {
         ret.push_back(result.front());
         result.pop();
     }

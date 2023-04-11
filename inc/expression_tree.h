@@ -7,18 +7,22 @@
 #include "calculatables.h"
 
 using std::vector;
-using std::unique_ptr;
+using std::shared_ptr;
+using std::shared_ptr;
+using std::make_shared;
 
 
 
 
 
 class ExpressionTree {
-    unique_ptr<ICalculatable> root_;
+    shared_ptr<ICalculatable> root_;
+    bool valid_;
 
 public:
     ExpressionTree(const vector<Token> &tokens);
-    unique_ptr<ICalculatable>& getRoot();
+    shared_ptr<ICalculatable>& getRoot();
+    bool valid();
 
 private:
     void buildTree(const vector<Token> &tokens);

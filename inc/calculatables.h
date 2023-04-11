@@ -4,16 +4,16 @@
 #include "icalculatable.h"
 
 
-using std::unique_ptr;
+using std::shared_ptr;
 
 
 struct BinaryOp : public ICalculatable {
-    unique_ptr<ICalculatable> right_;
-    unique_ptr<ICalculatable> left_;
+    shared_ptr<ICalculatable> right_;
+    shared_ptr<ICalculatable> left_;
 };
 
 struct UnaryOp : public ICalculatable {
-    unique_ptr<ICalculatable> child_;
+    shared_ptr<ICalculatable> child_;
 };
 
 struct SumOp : public BinaryOp {
