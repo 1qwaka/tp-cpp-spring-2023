@@ -105,16 +105,29 @@ vector<Token> arithmetic_tokenizer::tokenize(const string &expr) {
 
     if (error) {
         tokens.clear();
+    } else if (tokens.size() != 0) {
+        tokens = postprocess(tokens);
     }
     
     return tokens;
 }
 
 static vector<Token> postprocess(vector<Token> &tokens) {
-    vector<Token>processed;
+    vector<Token> processed;
 
-    for (size_t i = 1; i < tokens.size() - 1; i++) {
-        // if ()
+    processed.push_back(tokens[0]);
+
+    for (size_t i = 1; i < tokens.size(); i++) {
+        if (tokens[i].type_ == TokenType::kNumber && 
+            tokens[i - 1].type_ == TokenType::kSubOp &&
+            (i < 2 || 
+             tokens[i - 2].type_ != TokenType::kNumber && 
+             tokens[i - 2].type_ != TokenType::kCloseBracket)) {
+            processed.pop_back();
+            processed.push_back(Token(TokenType::kNumber, "-" + tokens[i].value_));
+        } else {
+            processed.push_back(tokens[i]);
+        }
     }
     
     return processed;
