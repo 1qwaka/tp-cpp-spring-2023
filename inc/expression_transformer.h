@@ -5,7 +5,6 @@
 
 using std::vector;
 
-namespace expression_transformer
-{
+namespace expression_transformer {
     vector<Token> infix_to_postfix(vector<Token> tokens);
 }

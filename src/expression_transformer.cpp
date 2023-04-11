@@ -7,11 +7,6 @@ using std::stack;
 using std::queue;
 
 
-// верное количество скобок
-// нет двух чисел подряд
-// нет двух операторов подряд
-// выражение не начинается с оператора
-
 
 vector<Token> expression_transformer::infix_to_postfix(vector<Token> tokens) {
     queue<Token> result;

@@ -6,7 +6,6 @@
 #include "expression_transformer.h"
 #include "expression_tree.h"
 
-// #define DEBUG
 
 using std::cout;
 using std::cin;
