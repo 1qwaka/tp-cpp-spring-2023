@@ -38,8 +38,16 @@ void ExpressionTree::buildTree(const vector<Token> &tokens) {
         {
         case TokenType::kNumber: {
             shared_ptr<Number> n = make_shared<Number>();
-            n->value_ = std::stod(tok.value_);
-            tree_branches.push(std::move(n));
+
+            try {
+                n->value_ = std::stod(tok.value_);
+                tree_branches.push(std::move(n));
+            } catch (const std::invalid_argument &e) {
+                valid_ = false;
+            } catch (std::out_of_range) {
+                valid_ = false;
+            }
+
             break;
         }
         

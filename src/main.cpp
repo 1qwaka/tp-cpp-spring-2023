@@ -34,10 +34,12 @@ int main(int argc, char **argv) {
     }
 
     string s(argv[1]);
-    vector<Token> tokens = arithmetic_tokenizer::tokenize(s);
+    vector<Token> tokens;
+    
+    int error = arithmetic_tokenizer::tokenize(s, tokens);
 
-    if (tokens.empty()) {
-        cerr << "invalid tokens in expression" << endl;
+    if (error != arithmetic_tokenizer::kNoError) {
+        cerr << "cannot parse tokens in expression (error:" << error << ")" << endl;
         return kWrongTokens;
     }
 
