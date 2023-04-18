@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string>
 
 #include "args.h"
 
@@ -12,7 +13,7 @@ namespace args {
     char *get_argvalue(char *arg) {
         char *value = nullptr;
 
-        for ( ; *arg; arg++) {
+        for ( ; *arg; ++arg) {
             if (*arg == kArgValueSeparator) {
                 value = arg + 1;
                 break;
@@ -26,7 +27,7 @@ namespace args {
         std::string current_arg;
         char *return_arg = nullptr;
 
-        for (int i = 0; i < argc; i++) {
+        for (int i = 0; i < argc; ++i) {
             current_arg = argv[i];
             if (current_arg.find(arg) == kArgStartsFromIdx) {
                 return_arg = argv[i];

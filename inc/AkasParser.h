@@ -15,5 +15,5 @@ class AkasParser : TSVParser {
 
 public:
     AkasParser(const std::string& path);
-    void printRuNames(std::vector<size_t>& title_ids);
+    void printRuNames(const std::vector<size_t>& title_ids);
 };

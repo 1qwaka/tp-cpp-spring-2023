@@ -1,6 +1,6 @@
 #include "splitter.h"
 
-void splitter::split(std::string& src, std::vector<std::string>& dst, char delim, bool take_empty) {
+void splitter::split(const std::string& src, std::vector<std::string>& dst, char delim, bool take_empty) {
     size_t last_idx = 0;
 
     while (last_idx < src.size()) {
@@ -12,7 +12,7 @@ void splitter::split(std::string& src, std::vector<std::string>& dst, char delim
         }
         
         if (take_empty && delim_idx - last_idx == 0) {
-            last_idx++;
+            ++last_idx;
             continue;
         }
 

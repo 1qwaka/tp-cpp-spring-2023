@@ -8,7 +8,7 @@
 
 AkasParser::AkasParser(const std::string& path): TSVParser(path) { }
 
-void AkasParser::printRuNames(std::vector<size_t>& title_ids) {
+void AkasParser::printRuNames(const std::vector<size_t>& title_ids) {
     processByPred(
     [&title_ids](std::vector<std::string>& fields) -> bool {
         size_t titleId = title::parseId(fields[kTitleIdIdx]);
